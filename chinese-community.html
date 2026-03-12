@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ชุมชนชาวจีนในบางปลาสร้อย — บ้านหลวงอำนาจจีนนิกร</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+Thai:wght@300;400;600;700&family=Sarabun:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:         #080705;
+      --bg2:        #0e0c0a;
+      --bg3:        #161310;
+      --gold:       #c49a28;
+      --gold-lt:    #e3be60;
+      --gold-dk:    #7a5c18;
+      --gold-tint:  rgba(196,154,40,0.12);
+      --ivory:      #f0e8d4;
+      --ivory-dim:  #a8997e;
+      --ivory-faint:#534b3a;
+      --rule:       rgba(196,154,40,0.18);
+      --serif:      'Noto Serif Thai','Cormorant Garamond',serif;
+      --en:         'Cormorant Garamond',serif;
+      --sans:       'Sarabun',sans-serif;
+    }
+
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      background:var(--bg);
+      color:var(--ivory);
+      font-family:var(--sans);
+      font-weight:300;
+      line-height:1.75;
+      overflow-x:hidden;
+    }
+    img{display:block;max-width:100%}
+    a{color:inherit;text-decoration:none}
+
+    /* grain overlay */
+    body::after{
+      content:'';
+      position:fixed;inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events:none;
+      z-index:9998;
+      opacity:.45;
+    }
+
+    /* topbar */
+    .topbar{
+      position:sticky;top:0;
+      background:rgba(8,7,5,.95);
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid var(--rule);
+      padding:.9rem clamp(1.5rem,5vw,5rem);
+      display:flex;align-items:center;justify-content:space-between;
+      z-index:100;
+    }
+    .back-btn{
+      display:inline-flex;align-items:center;gap:.5rem;
+      font-family:var(--serif);font-size:.85rem;letter-spacing:.06em;
+      color:var(--gold);
+      transition:color .2s;
+    }
+    .back-btn:hover{color:var(--gold-lt)}
+    .topbar-title{
+      font-family:var(--serif);font-size:.78rem;letter-spacing:.14em;
+      color:var(--ivory-faint);text-transform:uppercase;
+    }
+
+    /* hero */
+    .story-hero{
+      position:relative;
+      min-height:320px;
+      display:flex;align-items:flex-end;
+      overflow:hidden;
+    }
+    .hero-bg{
+      position:absolute;inset:0;
+      background-image:url('ชุมชนชาวจีนในบางปลาสร้อย/คนจีนหางเปียร่วมรบ.jpg');
+      background-size:cover;
+      background-position:center 40%;
+      filter:brightness(.4) sepia(.35);
+    }
+    .hero-bg::after{
+      content:'';
+      position:absolute;inset:0;
+      background:linear-gradient(to top, rgba(8,7,5,1) 0%, rgba(8,7,5,.55) 55%, transparent 100%);
+    }
+    .hero-content{
+      position:relative;z-index:1;
+      padding:3rem clamp(1.5rem,6vw,6rem) 3.5rem;
+      max-width:780px;
+    }
+    .story-label{
+      font-family:var(--en);font-size:.7rem;letter-spacing:.3em;
+      color:var(--gold);text-transform:uppercase;
+      display:block;margin-bottom:1rem;
+    }
+    .story-title{
+      font-family:var(--serif);
+      font-size:clamp(1.8rem,4vw,2.8rem);
+      font-weight:600;
+      line-height:1.25;
+      letter-spacing:-.01em;
+      color:var(--ivory);
+      margin-bottom:1.2rem;
+    }
+    .story-sub{
+      font-size:.9rem;
+      color:var(--ivory-dim);
+      line-height:1.7;
+      max-width:560px;
+    }
+
+    /* article */
+    .article-wrap{
+      max-width:740px;
+      margin:0 auto;
+      padding:3.5rem clamp(1.5rem,5vw,3rem) 0;
+    }
+    .article-body{
+      font-size:1rem;
+      line-height:1.9;
+      color:var(--ivory-dim);
+    }
+    .article-body p{
+      margin-bottom:1.5rem;
+    }
+
+    /* entry cards */
+    .entry-list{
+      display:flex;
+      flex-direction:column;
+      gap:2rem;
+      margin:2rem 0 2.5rem;
+    }
+    .entry{
+      display:grid;
+      grid-template-columns:auto 1fr;
+      gap:1.2rem;
+      align-items:start;
+    }
+    .entry-num{
+      font-family:var(--en);
+      font-size:.65rem;
+      letter-spacing:.25em;
+      color:var(--gold);
+      padding-top:.3rem;
+      white-space:nowrap;
+    }
+    .entry-body h3{
+      font-family:var(--serif);
+      font-size:1rem;
+      font-weight:600;
+      color:var(--ivory);
+      margin-bottom:.5rem;
+      letter-spacing:.02em;
+    }
+    .entry-body p{
+      margin-bottom:0;
+      font-size:.95rem;
+    }
+
+    /* inline images */
+    .inline-img{
+      margin:2.5rem 0;
+      display:grid;
+      gap:1rem;
+    }
+    .inline-img.duo{grid-template-columns:1fr 1fr}
+    .inline-img.solo{grid-template-columns:1fr;max-width:540px;margin-left:auto;margin-right:auto}
+    .inline-img img{
+      width:100%;
+      aspect-ratio:4/3;
+      object-fit:cover;
+      filter:sepia(22%) brightness(.82);
+      border:1px solid var(--rule);
+    }
+    .inline-img figcaption{
+      font-size:.8rem;
+      color:var(--ivory-faint);
+      margin-top:.45rem;
+      line-height:1.5;
+      font-style:italic;
+    }
+
+    /* rule */
+    .a-rule{
+      border:none;
+      border-top:1px solid var(--rule);
+      margin:2.5rem 0;
+    }
+
+    /* closing */
+    .closing{
+      background:var(--bg2);
+      border:1px solid var(--rule);
+      border-radius:2px;
+      padding:1.5rem 1.8rem;
+      margin:2rem 0;
+      font-size:.95rem;
+      color:var(--ivory-dim);
+      line-height:1.9;
+    }
+
+    /* bottom nav */
+    .bottom-nav{
+      text-align:center;
+      padding:3rem clamp(1.5rem,5vw,5rem) 5rem;
+      border-top:1px solid var(--rule);
+      margin-top:3rem;
+    }
+    .bottom-nav a{
+      display:inline-flex;align-items:center;gap:.5rem;
+      color:var(--gold);
+      font-family:var(--serif);
+      font-size:1rem;
+      letter-spacing:.06em;
+      border:1px solid var(--rule);
+      padding:.6rem 1.6rem;
+      border-radius:2px;
+      transition:background .2s,border-color .2s;
+    }
+    .bottom-nav a:hover{background:var(--gold-tint);border-color:var(--gold-dk)}
+
+    /* lightbox */
+    #lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:10000;align-items:center;justify-content:center;cursor:zoom-out;backdrop-filter:blur(6px)}
+    #lb.open{display:flex}
+    #lb-img{max-width:90vw;max-height:90vh;width:auto;height:auto;object-fit:contain;display:block;box-shadow:0 0 80px rgba(0,0,0,.9);filter:none !important;transform:none !important;aspect-ratio:unset !important;cursor:default}
+    .img-zoom{cursor:zoom-in !important}
+
+    @media(max-width:640px){
+      .inline-img.duo{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="back-btn">← กลับ</a>
+  <span class="topbar-title">บ้านหลวงอำนาจจีนนิกร</span>
+</div>
+
+<div class="story-hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <span class="story-label">ประวัติศาสตร์ชุมชน</span>
+    <h1 class="story-title">ชุมชนชาวจีน<br>ในบางปลาสร้อย</h1>
+    <p class="story-sub">รากเหง้าชาวจีนในชลบุรีที่หยั่งลึกกว่าที่หลายคนคาด ตั้งแต่ปลายสมัยกรุงศรีอยุธยาสู่การหลอมรวมเป็นคนไทยเชื้อสายจีนในปัจจุบัน</p>
+  </div>
+</div>
+
+<div class="article-wrap">
+<div class="article-body">
+
+<div class="entry-list">
+
+  <div class="entry">
+    <span class="entry-num">— ๐๑ —</span>
+    <div class="entry-body">
+      <h3>จุดเริ่มต้นของการอพยพที่ยาวนานกว่าที่คิด</h3>
+      <p>หลายคนอาจเข้าใจว่าชาวจีน "เสื่อผืนหมอนใบ" เพิ่งเข้ามาในสมัยรัตนโกสินทร์ แต่แท้จริงแล้ว ชาวจีนเริ่มอพยพเข้ามาตั้งถิ่นฐานทางชายฝั่งตะวันออก รวมถึงชลบุรี ตั้งแต่ช่วง<strong style="color:var(--ivory)">ปลายสมัยกรุงศรีอยุธยา</strong> สาเหตุหลักมาจากการเกิดสงครามเปลี่ยนผ่านราชวงศ์ในจีน (จากราชวงศ์หมิงสู่ราชวงศ์ชิง) ทำให้ชาวจีนตอนใต้อพยพหนีภัยลงมายังเอเชียตะวันออกเฉียงใต้</p>
+    </div>
+  </div>
+
+  <div class="entry">
+    <span class="entry-num">— ๐๒ —</span>
+    <div class="entry-body">
+      <h3>หลักฐานสำคัญสมัยอยุธยา</h3>
+      <p>ภาพจิตรกรรมฝาผนังภายในพระอุโบสถ<strong style="color:var(--ivory)">วัดใหญ่อินทาราม</strong> ซึ่งเป็นวัดเก่าแก่ที่สร้างขึ้นในสมัยกรุงศรีอยุธยา เป็นหนึ่งในหลักฐานชิ้นสำคัญที่ยืนยันการมีอยู่ของชุมชนชาวจีนในยุคนั้น โดยปรากฏภาพของชาวจีนโบราณไว้ผมหางเปียนั่งอยู่ในเรือ สะท้อนให้เห็นถึงวิถีชีวิตและการเดินทางค้าขายทางน้ำในพื้นที่ชลบุรีในอดีตอย่างชัดเจน</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="inline-img duo">
+  <figure>
+    <img src="ชุมชนชาวจีนในบางปลาสร้อย/ภาพวาดในวัดใหญ่อินทราราม.jpg" alt="ภาพวาดในวัดใหญ่อินทราราม">
+    <figcaption>ภาพจิตรกรรมฝาผนังในวัดใหญ่อินทาราม</figcaption>
+  </figure>
+  <figure>
+    <img src="ชุมชนชาวจีนในบางปลาสร้อย/คนจีนทางเปียในภาพวาดบนผนัง.jpg" alt="คนจีนในภาพวาดบนผนัง">
+    <figcaption>ชาวจีนหางเปียในภาพวาดบนผนัง</figcaption>
+  </figure>
+</div>
+
+<div class="entry-list">
+
+  <div class="entry">
+    <span class="entry-num">— ๐๓ —</span>
+    <div class="entry-body">
+      <h3>ร่องรอยแห่งศรัทธาและการรวมกลุ่มชุมชน</h3>
+      <p>สิ่งที่ยืนยันถึงการลงหลักปักฐานอย่างมั่นคงของชาวจีนในย่านชุมชนโบราณอย่าง "บางปลาสร้อย" และพื้นที่โดยรอบ คือการมี<strong style="color:var(--ivory)">ศาลเจ้า</strong>กระจายตัวอยู่เป็นจำนวนมาก โดยเฉพาะของกลุ่ม "ชาวจีนฮกเกี้ยน" ที่เป็นกลุ่มบุกเบิกดั้งเดิม ซึ่งได้สร้างศาลเจ้าเก๋งและศาลเจ้ากวนอูไว้ นอกจากนี้ การมี<strong style="color:var(--ivory)">โรงเจ</strong>และ<strong style="color:var(--ivory)">โรงเรียนจีน</strong>ในย่านนี้ ยังเป็นเครื่องยืนยันถึงความพยายามในการรวมกลุ่มเป็นชุมชนที่เข้มแข็ง เพื่อรักษาขนบธรรมเนียม ประเพณี และการสืบทอดวัฒนธรรมจากรุ่นสู่รุ่น</p>
+      <div class="inline-img solo" style="max-width:100%;margin-top:1.5rem">
+        <figure>
+          <img src="ชุมชนชาวจีนในบางปลาสร้อย/ศาลเจ้าในตัวเมืองชลบุรี.png" alt="ศาลเจ้าในตัวเมืองชลบุรี" style="aspect-ratio:unset;height:auto;object-fit:unset">
+          <figcaption>ศาลเจ้าในตัวเมืองชลบุรี</figcaption>
+        </figure>
+      </div>
+    </div>
+  </div>
+
+  <div class="entry">
+    <span class="entry-num">— ๐๔ —</span>
+    <div class="entry-body">
+      <h3>บทบาทสำคัญในหน้าประวัติศาสตร์</h3>
+      <p>ชาวจีนฮกเกี้ยนในพื้นที่นี้ไม่ได้เป็นเพียงแค่พ่อค้า แต่ยังมีบทบาทสำคัญในทางการเมืองและการทหารด้วย เช่น<strong style="color:var(--ivory)">"จีนเรือง"</strong> คหบดีชาวฮกเกี้ยนในย่านบางปลาสร้อย ที่ให้การช่วยเหลือและร่วมรบกับพระเจ้าตากสินมหาราช จนในเวลาต่อมาได้รับการสถาปนาเป็นขุนนางชั้นผู้ใหญ่ (ต้นราชสกุลสุนทรกุล ณ ชลบุรี)</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="inline-img duo">
+  <figure>
+    <img src="ชุมชนชาวจีนในบางปลาสร้อย/คนจีนหางเปียร่วมรบ.jpg" alt="คนจีนหางเปียร่วมรบ">
+    <figcaption>คนจีนหางเปียร่วมรบ</figcaption>
+  </figure>
+  <figure>
+    <img src="ชุมชนชาวจีนในบางปลาสร้อย/ภาพคนจีนหางเปีย.jpg" alt="ภาพคนจีนหางเปีย">
+    <figcaption>ภาพคนจีนหางเปีย</figcaption>
+  </figure>
+</div>
+
+<div class="entry-list">
+
+  <div class="entry">
+    <span class="entry-num">— ๐๕ —</span>
+    <div class="entry-body">
+      <h3>การเข้ามาของ "ชาวจีนแต้จิ๋ว"</h3>
+      <p>แม้ชาวจีนฮกเกี้ยนจะเข้ามาก่อนและเป็นรากฐานดั้งเดิม แต่ต่อมาในช่วงต้นกรุงรัตนโกสินทร์ ได้มีชาวจีนอพยพกลุ่มใหม่เข้ามาเป็นจำนวนมหาศาล นั่นคือ<strong style="color:var(--ivory)">"ชาวจีนแต้จิ๋ว"</strong> ทำให้ในยุคต่อมาและในปัจจุบัน ชลบุรีจึงมีประชากรเชื้อสายจีนแต้จิ๋วเป็นกลุ่มที่ใหญ่ที่สุด</p>
+    </div>
+  </div>
+
+  <div class="entry">
+    <span class="entry-num">— ๐๖ —</span>
+    <div class="entry-body">
+      <h3>วิถีชีวิตและการผสมผสานกลมกลืน</h3>
+      <p>ชุมชนชาวจีนในอดีตมักตั้งบ้านเรือนอยู่ริมทะเลและบริเวณปากน้ำ ประกอบอาชีพค้าขายและทำประมง เมื่อเวลาผ่านไป พวกเขาได้แต่งงานสร้างครอบครัวกับหญิงชาวไทย เช่น กรณีของ<strong style="color:var(--ivory)">"หลวงอำนาจจีนนิกร"</strong> ขุนนางที่มีบิดาเป็นจีนแต้จิ๋วและมารดาเป็นคนไทย ท้ายที่สุดแล้ว วัฒนธรรมและการใช้ชีวิตก็ได้ถูกหลอมรวมเข้าด้วยกัน จนปัจจุบันแทบจะแยกไม่ออกและกลายเป็น "คนไทยเชื้อสายจีน" อย่างสมบูรณ์แบบ</p>
+    </div>
+  </div>
+
+</div>
+
+<hr class="a-rule">
+
+<div class="closing">
+  เรื่องราวและหลักฐานทางประวัติศาสตร์เหล่านี้แสดงให้เห็นว่า ชาวจีนในชลบุรีมีรากเหง้าที่หยั่งลึกมายาวนาน และเป็นส่วนสำคัญในการสร้างความเจริญให้แก่พื้นที่ชายฝั่งตะวันออกของไทยมาตั้งแต่ยุคอยุธยา
+</div>
+
+</div><!-- .article-body -->
+</div><!-- .article-wrap -->
+
+<div class="bottom-nav">
+  <a href="index.html">← กลับสู่หน้าหลัก</a>
+</div>
+
+<!-- Lightbox -->
+<div id="lb"><img id="lb-img" src="" alt=""></div>
+
+<script>
+  const lb    = document.getElementById('lb');
+  const lbImg = document.getElementById('lb-img');
+  const close = () => { lb.classList.remove('open'); document.body.style.overflow = ''; };
+  document.querySelectorAll('img:not(#lb-img)').forEach(img => {
+    img.classList.add('img-zoom');
+    img.addEventListener('click', e => {
+      e.stopPropagation();
+      lbImg.src = img.src; lbImg.alt = img.alt;
+      lb.classList.add('open'); document.body.style.overflow = 'hidden';
+    });
+  });
+  lb.addEventListener('click', close);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+</script>
+</body>
+</html>

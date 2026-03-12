@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>บ้านหลวงอำนาจจีนนิกร — พิพิธภัณฑ์มรดกชลบุรี</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Noto+Serif+Thai:wght@300;400;600;700&family=Sarabun:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:         #080705;
+      --bg2:        #0e0c0a;
+      --bg3:        #161310;
+      --gold:       #c49a28;
+      --gold-lt:    #e3be60;
+      --gold-dk:    #7a5c18;
+      --gold-tint:  rgba(196,154,40,0.12);
+      --ivory:      #f0e8d4;
+      --ivory-dim:  #a8997e;
+      --ivory-faint:#534b3a;
+      --rule:       rgba(196,154,40,0.18);
+      --serif:      'Noto Serif Thai','Cormorant Garamond',serif;
+      --en:         'Cormorant Garamond',serif;
+      --sans:       'Sarabun',sans-serif;
+      --pad-x:      clamp(2rem,6vw,7rem);
+      --pad-y:      clamp(5rem,9vw,8rem);
+      --w:          1200px;
+    }
+
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      background:var(--bg);
+      color:var(--ivory);
+      font-family:var(--sans);
+      font-weight:300;
+      line-height:1.75;
+      overflow-x:hidden;
+    }
+    img{display:block;max-width:100%}
+    a{color:inherit;text-decoration:none}
+
+    /* grain overlay */
+    body::after{
+      content:'';
+      position:fixed;inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events:none;
+      z-index:9998;
+      opacity:.45;
+    }
+
+    /* scroll reveal */
+    .rv{opacity:0;transform:translateY(22px);transition:opacity .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1)}
+    .rv.on{opacity:1;transform:translateY(0)}
+    .d1{transition-delay:.1s}.d2{transition-delay:.2s}.d3{transition-delay:.3s}.d4{transition-delay:.4s}
+
+    /* ── NAV ── */
+    nav{
+      position:fixed;top:0;left:0;right:0;z-index:200;
+      padding:1.6rem var(--pad-x);
+      display:flex;align-items:center;justify-content:space-between;
+      transition:background .4s,padding .4s,border-color .4s;
+      border-bottom:1px solid transparent;
+    }
+    nav.scrolled{
+      background:rgba(8,7,5,.96);
+      backdrop-filter:blur(14px);
+      padding:1rem var(--pad-x);
+      border-bottom-color:var(--rule);
+    }
+    .nav-logo{
+      font-family:var(--serif);font-size:.82rem;font-weight:600;
+      letter-spacing:.18em;color:var(--gold);text-transform:uppercase;
+    }
+    .nav-links{
+      display:flex;gap:2.5rem;list-style:none;
+      font-size:.76rem;letter-spacing:.06em;
+    }
+    .nav-links a{
+      color:var(--ivory);position:relative;
+      transition:color .25s;
+    }
+    .nav-links a::after{
+      content:'';position:absolute;bottom:-3px;
+      left:50%;right:50%;height:1px;
+      background:var(--gold);
+      transition:left .3s,right .3s;
+    }
+    .nav-links a:hover{color:var(--gold-lt)}
+    .nav-links a:hover::after{left:0;right:0}
+
+    /* ── CHINESE COMMUNITY ── */
+    .chin-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:1rem}
+    .chin-list li{padding-left:1.2rem;border-left:2px solid var(--rule);color:var(--ivory-dim);line-height:1.8;font-size:.94rem}
+    .chin-list li strong{color:var(--ivory)}
+    .chin-img-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+    .chin-img-grid img{width:100%;aspect-ratio:4/3;object-fit:cover;filter:sepia(20%) brightness(.82);border:1px solid var(--rule)}
+
+    /* ── HAMBURGER ── */
+    .nav-burger{
+      display:none;
+      flex-direction:column;justify-content:center;gap:5px;
+      width:36px;height:36px;
+      background:none;border:none;cursor:pointer;padding:4px;
+      z-index:201;
+    }
+    .nav-burger span{
+      display:block;width:22px;height:1.5px;
+      background:var(--ivory);
+      transition:transform .3s,opacity .3s,width .3s;
+      transform-origin:center;
+    }
+    .nav-burger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+    .nav-burger.open span:nth-child(2){opacity:0;width:0}
+    .nav-burger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+    /* mobile drawer */
+    .nav-drawer{
+      display:none;
+      position:fixed;top:0;left:0;right:0;
+      background:rgba(8,7,5,.97);
+      backdrop-filter:blur(16px);
+      padding:5rem var(--pad-x) 2.5rem;
+      flex-direction:column;gap:0;
+      z-index:199;
+      border-bottom:1px solid var(--rule);
+      transform:translateY(-100%);
+      transition:transform .35s cubic-bezier(.16,1,.3,1);
+    }
+    .nav-drawer.open{transform:translateY(0)}
+    .nav-drawer li{list-style:none;border-bottom:1px solid var(--rule)}
+    .nav-drawer li a{
+      display:block;padding:1rem 0;
+      font-family:var(--serif);font-size:1rem;letter-spacing:.08em;
+      color:var(--ivory);
+      transition:color .2s,padding-left .2s;
+    }
+    .nav-drawer li a:hover{color:var(--gold);padding-left:.5rem}
+
+    /* ── HERO ── */
+    .hero{
+      position:relative;height:100vh;min-height:620px;
+      display:flex;align-items:flex-end;overflow:hidden;
+    }
+    .hero-bg{
+      position:absolute;inset:0;
+      background:url('HomepagePhotos/บ้านหลวงอำนาจีนิกร.jpg') center 40%/cover no-repeat;
+      transform:scale(1.06);will-change:transform;
+    }
+    .hero-overlay{
+      position:absolute;inset:0;
+      background:linear-gradient(to bottom,
+        rgba(8,7,5,.25) 0%,
+        rgba(8,7,5,.05) 25%,
+        rgba(8,7,5,.55) 65%,
+        rgba(8,7,5,.97) 100%
+      );
+    }
+    .hero-glow{
+      position:absolute;inset:0;
+      background:radial-gradient(ellipse 60% 50% at 65% 35%,rgba(196,154,40,.07),transparent);
+    }
+    .hero-content{
+      position:relative;z-index:2;
+      padding:0 var(--pad-x) clamp(4rem,8vh,6.5rem);
+      max-width:960px;
+    }
+    .hero-eyebrow{
+      display:flex;align-items:center;gap:1rem;
+      font-family:var(--en);font-size:.72rem;letter-spacing:.32em;
+      color:var(--gold);text-transform:uppercase;
+      margin-bottom:1.6rem;
+      opacity:0;animation:upFade 1s cubic-bezier(.16,1,.3,1) .3s forwards;
+    }
+    .hero-eyebrow span{display:block;width:38px;height:1px;background:var(--gold)}
+    .hero-h1{
+      font-family:var(--serif);
+      font-size:clamp(3rem,6.5vw,5.8rem);
+      font-weight:600;line-height:1.07;
+      color:var(--ivory);margin-bottom:.7rem;
+      opacity:0;animation:upFade 1s cubic-bezier(.16,1,.3,1) .5s forwards;
+    }
+    .hero-h1 em{color:var(--gold);font-style:normal}
+    .hero-sub{
+      font-size:clamp(.95rem,1.7vw,1.2rem);
+      color:var(--ivory-dim);font-weight:300;
+      letter-spacing:.03em;margin-bottom:2.8rem;
+      opacity:0;animation:upFade 1s cubic-bezier(.16,1,.3,1) .7s forwards;
+    }
+    .hero-stats{
+      display:flex;gap:3rem;flex-wrap:wrap;
+      opacity:0;animation:upFade 1s cubic-bezier(.16,1,.3,1) .9s forwards;
+    }
+    .hero-stat{border-left:1px solid var(--gold);padding-left:1rem}
+    .hero-stat small{
+      display:block;font-size:.62rem;letter-spacing:.22em;
+      color:var(--gold);text-transform:uppercase;margin-bottom:.2rem;
+    }
+    .hero-stat strong{font-family:var(--serif);font-size:1rem;font-weight:400;color:var(--ivory)}
+    .scroll-hint{
+      position:absolute;bottom:2.2rem;right:var(--pad-x);
+      display:flex;flex-direction:column;align-items:center;gap:.5rem;
+      opacity:0;animation:fadeIn 1s .4s 1.4s forwards;
+    }
+    .scroll-hint span{font-size:.58rem;letter-spacing:.28em;color:var(--gold);writing-mode:vertical-rl}
+    .scroll-bar{width:1px;height:44px;background:linear-gradient(to bottom,transparent,var(--gold));animation:pulse 2.2s ease infinite}
+
+    /* ── DIVIDER ── */
+    .divider{
+      display:flex;align-items:center;gap:1.2rem;
+      max-width:var(--w);margin:0 auto;
+      padding:4.5rem var(--pad-x);
+    }
+    .divider-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--gold-dk),transparent)}
+    .divider-gem{color:var(--gold);font-size:.9rem;letter-spacing:.5em;opacity:.7}
+
+    /* ── SECTION WRAPPER ── */
+    .wrap{max-width:var(--w);margin:0 auto;padding:var(--pad-y) var(--pad-x)}
+    .band{padding:var(--pad-y) 0;background:var(--bg2)}
+    .band .wrap{padding-top:0;padding-bottom:0}
+    .band2{padding:var(--pad-y) 0;background:var(--bg3)}
+    .band2 .wrap{padding-top:0;padding-bottom:0}
+
+    /* section heading */
+    .sec-num{display:block;font-family:var(--en);font-size:.64rem;letter-spacing:.32em;color:var(--gold);margin-bottom:1rem}
+    .sec-h{font-family:var(--serif);font-size:clamp(2rem,4vw,3.2rem);font-weight:600;line-height:1.15}
+    .sec-en{display:block;font-family:var(--en);font-style:italic;font-size:clamp(.95rem,2vw,1.35rem);color:var(--gold);font-weight:300;margin-top:.3rem;margin-bottom:2.5rem}
+
+    /* ── ABOUT ── */
+    .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;margin-top:3rem}
+    .about-text p{color:var(--ivory-dim);font-size:.97rem;line-height:1.9;margin-bottom:1.2rem}
+    .about-text p:first-child{font-size:1.07rem;color:var(--ivory)}
+    .about-stats{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:3rem}
+    .stat{border-top:1px solid var(--rule);padding-top:1.25rem}
+    .stat-n{font-family:var(--en);font-size:2.6rem;font-weight:300;color:var(--gold);line-height:1;display:block}
+    .stat-l{font-size:.76rem;color:var(--ivory-faint);letter-spacing:.05em;margin-top:.35rem}
+    .about-imgs{position:relative}
+    .about-img1{width:100%;aspect-ratio:3/4;object-fit:cover;filter:sepia(15%) brightness(.9)}
+    .about-img2{
+      position:absolute;width:54%;aspect-ratio:4/3;
+      object-fit:cover;bottom:-2.5rem;left:-2.5rem;
+      border:4px solid var(--bg);filter:sepia(18%) brightness(.86);
+    }
+
+    /* ── PULL QUOTE ── */
+    .pq{
+      background:var(--bg2);border-left:3px solid var(--gold);
+      padding:2.8rem 3.2rem;margin:3.5rem 0;position:relative;
+      overflow:hidden;
+    }
+    .pq::before{
+      content:'\201C';font-family:var(--en);font-size:9rem;
+      color:var(--gold);opacity:.1;
+      position:absolute;top:-2rem;left:1.5rem;line-height:1;
+    }
+    .pq p{font-family:var(--serif);font-size:clamp(1.05rem,2.1vw,1.45rem);font-weight:300;font-style:italic;color:var(--ivory);line-height:1.65;position:relative}
+    .pq cite{display:block;font-family:var(--sans);font-size:.74rem;color:var(--gold);letter-spacing:.1em;margin-top:1.4rem}
+
+    /* ── TIMELINE ── */
+    .tl{position:relative;padding-left:3rem;margin-top:2.5rem}
+    .tl::before{
+      content:'';position:absolute;left:0;top:.4rem;bottom:0;
+      width:1px;
+      background:linear-gradient(to bottom,transparent,var(--gold-dk) 8%,var(--gold-dk) 92%,transparent);
+    }
+    .tl-item{position:relative;padding-bottom:2.8rem}
+    .tl-item::before{
+      content:'';position:absolute;left:-3.3rem;top:.4rem;
+      width:8px;height:8px;border-radius:50%;
+      background:var(--gold);box-shadow:0 0 10px rgba(196,154,40,.5);
+    }
+    .tl-yr{display:block;font-family:var(--en);font-size:.68rem;letter-spacing:.22em;color:var(--gold);margin-bottom:.4rem}
+    .tl-ev{font-family:var(--serif);font-size:1.1rem;font-weight:600;color:var(--ivory);margin-bottom:.4rem;line-height:1.4}
+    .tl-desc{font-size:.88rem;color:var(--ivory-dim);line-height:1.75}
+
+    /* ── FEATURE 2-COL ── */
+    .f2{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:center}
+    .f2.rev .fi{order:2}.f2.rev .ft{order:1}
+    .fi img{width:100%;aspect-ratio:3/4;object-fit:cover;filter:sepia(15%) brightness(.88)}
+    .ft p{color:var(--ivory-dim);line-height:1.9;margin-bottom:1rem;font-size:.96rem}
+    .ft strong{color:var(--gold)}
+    .ft-label{display:block;font-size:.62rem;letter-spacing:.22em;color:var(--gold);margin-bottom:1rem}
+
+    /* ── ARCH GRID ── */
+    .arch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.8rem;margin-bottom:1.5rem}
+    .arch-item{background:var(--bg3);overflow:hidden}
+    .arch-item img{width:100%;aspect-ratio:4/3;object-fit:cover;filter:brightness(.82) contrast(1.08);transition:transform .6s cubic-bezier(.16,1,.3,1)}
+    .arch-item:hover img{transform:scale(1.05)}
+    .arch-label{padding:.65rem .9rem;font-size:.72rem;color:var(--ivory-faint);letter-spacing:.1em;border-top:1px solid var(--rule)}
+    .renders-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.8rem}
+    .rnd img{width:100%;aspect-ratio:16/9;object-fit:cover;filter:brightness(.84);transition:filter .4s}
+    .rnd:hover img{filter:brightness(.97)}
+    .sub-h{font-family:var(--serif);font-size:1.15rem;color:var(--ivory-dim);font-weight:400;margin-bottom:1.8rem;margin-top:3.5rem}
+
+    /* ── INTERIOR ── */
+    .int-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+    .int-item{background:var(--bg3);overflow:hidden}
+    .int-item img{width:100%;aspect-ratio:4/3;object-fit:cover;filter:brightness(.88) sepia(10%);transition:transform .5s cubic-bezier(.16,1,.3,1),filter .5s}
+    .int-item:hover img{transform:scale(1.05);filter:brightness(.98) sepia(3%)}
+    .int-cap{padding:.6rem .75rem;font-size:.72rem;color:var(--ivory-faint);line-height:1.5}
+
+    /* ── OLD PHOTOS GALLERY ── */
+    .gal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:2px}
+    .gal-item{position:relative;overflow:hidden;aspect-ratio:4/3;background:var(--bg2)}
+    .gal-item img{width:100%;height:100%;object-fit:cover;filter:sepia(22%) brightness(.82) contrast(1.05);transform:scale(1.03);transition:transform .65s cubic-bezier(.16,1,.3,1),filter .5s}
+    .gal-item:hover img{transform:scale(1.1);filter:sepia(8%) brightness(.94)}
+    .gal-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,7,5,.85),transparent 55%);opacity:0;transition:opacity .35s}
+    .gal-item:hover .gal-ov{opacity:1}
+    .gal-cap{position:absolute;bottom:1.2rem;left:1.2rem;right:1.2rem;font-size:.72rem;color:var(--ivory);opacity:0;transform:translateY(6px);transition:opacity .35s,transform .35s}
+    .gal-item:hover .gal-cap{opacity:1;transform:translateY(0)}
+
+    /* ── NOVELS ── */
+    .books{display:grid;grid-template-columns:repeat(3,1fr);gap:3rem}
+    .book{text-align:center}
+    .book-wrap{position:relative;display:inline-block;width:100%}
+    .book-wrap::after{content:'';position:absolute;inset:0;background:linear-gradient(140deg,rgba(196,154,40,.06),transparent 55%);pointer-events:none}
+    .book img{width:100%;aspect-ratio:2/3;object-fit:cover;box-shadow:8px 10px 32px rgba(0,0,0,.7),-2px 0 8px rgba(0,0,0,.4);transition:transform .45s cubic-bezier(.16,1,.3,1),box-shadow .45s}
+    .book:hover img{transform:translateY(-10px) rotate(-1.2deg);box-shadow:18px 28px 52px rgba(0,0,0,.8),-4px 0 14px rgba(0,0,0,.5)}
+    .book-title{font-family:var(--serif);font-size:1.1rem;margin-top:1.4rem;color:var(--ivory)}
+    .book-author{font-size:.74rem;color:var(--gold);letter-spacing:.1em;margin-top:.35rem}
+
+    /* ── PLAQUES ── */
+    .plq-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem}
+    .plq-item img{width:100%;object-fit:cover;filter:sepia(18%) brightness(.82)}
+    .plq-cap{padding:.9rem 0 0;font-size:.82rem;color:var(--ivory-dim);line-height:1.6}
+
+    /* ── AWARD ── */
+    .award-wrap{display:grid;grid-template-columns:1fr 2fr;gap:5rem;align-items:center;margin-top:3rem}
+    .award-img-wrap{position:relative}
+    .award-img-wrap img{width:100%;object-fit:cover;filter:sepia(18%) brightness(.84)}
+    .award-img-wrap::before{content:'';position:absolute;inset:-9px;border:1px solid var(--gold-dk);pointer-events:none}
+    .award-badge{
+      display:inline-flex;align-items:center;gap:1rem;
+      background:var(--gold-tint);border:1px solid var(--gold-dk);
+      padding:.7rem 1.4rem;margin-bottom:2rem;
+    }
+    .award-badge-text{font-size:.7rem;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;line-height:1.5}
+    .award-yr{display:block;font-family:var(--en);font-size:.68rem;color:var(--gold);letter-spacing:.2em;margin-bottom:1.4rem}
+    .award-h{font-family:var(--serif);font-size:clamp(1.35rem,2.4vw,2rem);line-height:1.3;margin-bottom:1rem}
+    .award-p{font-size:.93rem;color:var(--ivory-dim);line-height:1.9}
+    .award-sub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:4rem}
+    .award-sub-item img{width:100%;aspect-ratio:4/3;object-fit:cover;filter:brightness(.8) sepia(14%)}
+    .award-sub-cap{font-size:.72rem;color:var(--ivory-faint);padding-top:.5rem}
+
+    /* ── VIDEO SECTION ── */
+    .video-wrap{
+      position:relative;width:100%;
+      padding-bottom:56.25%; /* 16:9 */
+      height:0;overflow:hidden;
+      background:#000;
+    }
+    .video-wrap iframe{
+      position:absolute;inset:0;
+      width:100%;height:100%;
+      border:none;
+    }
+    .video-frame{
+      border:1px solid var(--rule);
+      padding:6px;
+      background:var(--bg3);
+    }
+    .video-meta{
+      margin-top:2rem;
+      display:flex;gap:2rem;align-items:flex-start;
+      flex-wrap:wrap;
+    }
+    .video-meta-bar{
+      width:3px;height:100%;
+      background:var(--gold);
+      align-self:stretch;
+      flex-shrink:0;
+    }
+    .video-desc{
+      font-size:.92rem;color:var(--ivory-dim);
+      line-height:1.85;flex:1;min-width:240px;
+    }
+
+    /* ── FOOTER ── */
+    .footer{border-top:1px solid var(--rule);max-width:var(--w);margin:0 auto;padding:4rem var(--pad-x);display:grid;grid-template-columns:1fr 1fr;gap:3rem}
+    .foot-brand{font-family:var(--serif);font-size:1.4rem;font-weight:600;color:var(--gold);margin-bottom:.7rem}
+    .foot-desc{font-size:.83rem;color:var(--ivory-faint);line-height:1.75}
+    .foot-addr{font-size:.83rem;color:var(--ivory-faint);line-height:2;text-align:right}
+    .foot-copy{border-top:1px solid var(--rule);max-width:var(--w);margin:0 auto;padding:1.4rem var(--pad-x);display:flex;justify-content:space-between}
+    .foot-copy span{font-size:.7rem;color:var(--ivory-faint);letter-spacing:.05em}
+
+    /* ── KEYFRAMES ── */
+    @keyframes upFade{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
+
+    /* ── LIGHTBOX ── */
+    .lb{
+      position:fixed;inset:0;z-index:9000;
+      background:rgba(5,4,3,.96);
+      display:flex;align-items:center;justify-content:center;
+      opacity:0;pointer-events:none;
+      transition:opacity .35s ease;
+    }
+    .lb.open{opacity:1;pointer-events:all}
+    .lb-inner{
+      position:relative;
+      display:flex;flex-direction:column;align-items:center;
+      max-width:92vw;max-height:92vh;
+    }
+    .lb-img-wrap{
+      position:relative;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .lb-img{
+      max-width:88vw;max-height:82vh;
+      object-fit:contain;
+      display:block;
+      box-shadow:0 0 80px rgba(0,0,0,.8);
+      transform:scale(.96);
+      transition:transform .4s cubic-bezier(.16,1,.3,1);
+    }
+    .lb.open .lb-img{transform:scale(1)}
+    .lb-caption{
+      margin-top:1.1rem;
+      font-family:var(--sans);font-size:.78rem;
+      color:var(--ivory-dim);letter-spacing:.06em;
+      text-align:center;max-width:600px;line-height:1.5;
+    }
+    .lb-count{
+      font-family:var(--en);font-size:.65rem;
+      color:var(--gold);letter-spacing:.2em;
+      margin-top:.4rem;
+    }
+    /* close */
+    .lb-close{
+      position:fixed;top:1.6rem;right:2rem;
+      width:44px;height:44px;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;
+      color:var(--ivory-dim);font-size:1.6rem;line-height:1;
+      border:1px solid var(--rule);
+      background:rgba(8,7,5,.6);
+      transition:color .2s,border-color .2s,background .2s;
+    }
+    .lb-close:hover{color:var(--gold);border-color:var(--gold);background:rgba(8,7,5,.9)}
+    /* arrows */
+    .lb-prev,.lb-next{
+      position:fixed;top:50%;
+      transform:translateY(-50%);
+      width:52px;height:52px;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;
+      color:var(--ivory-dim);font-size:1.4rem;
+      border:1px solid var(--rule);
+      background:rgba(8,7,5,.55);
+      transition:color .2s,border-color .2s,background .2s,opacity .2s;
+    }
+    .lb-prev{left:1.5rem}
+    .lb-next{right:1.5rem}
+    .lb-prev:hover,.lb-next:hover{color:var(--gold);border-color:var(--gold);background:rgba(8,7,5,.9)}
+    .lb-prev.hidden,.lb-next.hidden{opacity:0;pointer-events:none}
+    /* clickable images */
+    .lb-trigger{cursor:zoom-in}
+    .lb-trigger:hover{opacity:.9}
+
+    /* read-more button */
+    .read-more-btn{
+      display:inline-flex;align-items:center;gap:.55rem;
+      font-family:var(--serif);font-size:1rem;letter-spacing:.1em;
+      color:var(--gold);
+      border:1px solid var(--rule);
+      padding:.65rem 2.2rem;
+      border-radius:2px;
+      background:transparent;
+      transition:background .25s,border-color .25s,color .25s;
+    }
+    .read-more-btn::after{content:'→';font-size:1.1rem}
+    .read-more-btn:hover{background:var(--gold-tint);border-color:var(--gold-dk)}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:900px){
+      .about-grid,.f2,.award-wrap{grid-template-columns:1fr}
+      .f2.rev .fi,.f2.rev .ft{order:unset}
+      .about-img2{display:none}
+      .arch-grid{grid-template-columns:repeat(2,1fr)}
+      .int-grid{grid-template-columns:repeat(2,1fr)}
+      .books{grid-template-columns:repeat(2,1fr)}
+      .award-wrap{grid-template-columns:1fr}
+      .footer{grid-template-columns:1fr}
+      .foot-addr{text-align:left}
+      .nav-links{display:none}
+      .nav-burger{display:flex}
+      .nav-drawer{display:flex}
+      .award-sub-grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:580px){
+      .arch-grid,.renders-grid,.int-grid{grid-template-columns:1fr}
+      .books{grid-template-columns:1fr}
+      .plq-grid{grid-template-columns:1fr}
+      .award-sub-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav id="nav">
+  <div class="nav-logo">บ้านหลวงอำนาจจีนนิกร</div>
+  <ul class="nav-links">
+    <li><a href="#history">ประวัติ</a></li>
+    <li><a href="#founder">ผู้ก่อตั้ง</a></li>
+    <li><a href="#architecture">สถาปัตยกรรม</a></li>
+    <li><a href="#gallery">ภาพเก่า</a></li>
+    <li><a href="#novels">นวนิยาย</a></li>
+    <li><a href="#award">รางวัล</a></li>
+    <li><a href="#chinese-community">คนจีนในชลบุรี</a></li>
+    <li><a href="#roots">ร่องรอย</a></li>
+  </ul>
+  <button class="nav-burger" id="navBurger" aria-label="เมนู">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- mobile drawer -->
+<ul class="nav-drawer" id="navDrawer">
+  <li><a href="#history">ประวัติ</a></li>
+  <li><a href="#founder">ผู้ก่อตั้ง</a></li>
+  <li><a href="#architecture">สถาปัตยกรรม</a></li>
+  <li><a href="#gallery">ภาพเก่า</a></li>
+  <li><a href="#novels">นวนิยาย</a></li>
+  <li><a href="#award">รางวัล</a></li>
+  <li><a href="#chinese-community">คนจีนในชลบุรี</a></li>
+  <li><a href="#roots">ร่องรอย</a></li>
+</ul>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow"><span></span>พิพิธภัณฑ์มรดกชลบุรี</div>
+    <h1 class="hero-h1">บ้าน<em>หลวงอำนาจ</em><br>จีนนิกร</h1>
+    <p class="hero-sub">จุดเริ่มต้นของชุมชนบ้านสะพานบางปลาสร้อย จังหวัดชลบุรี</p>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <small>ก่อสร้าง</small>
+        <strong>ก่อน พ.ศ. ๒๔๒๔</strong>
+      </div>
+      <div class="hero-stat">
+        <small>ที่ตั้ง</small>
+        <strong>ชลบุรี</strong>
+      </div>
+      <div class="hero-stat">
+        <small>รางวัลอนุรักษ์ศิลปะสถาปัตยกรรมดีเด่น</small>
+        <strong>จากสมาคมสถาปนิกสยาม</strong>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>เลื่อนลง</span>
+    <div class="scroll-bar"></div>
+  </div>
+</div>
+
+<!-- ── DIVIDER ── -->
+<div class="divider"><div class="divider-line"></div><div class="divider-gem">✦&nbsp;✦&nbsp;✦</div><div class="divider-line"></div></div>
+
+<!-- ── HISTORY ── -->
+<section id="history">
+  <div class="wrap">
+    <div class="rv">
+      <span class="sec-num">— ๐๑ —</span>
+      <h2 class="sec-h">เรื่องราวของบ้านเก่า</h2>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-text">
+        <p class="rv">บ้านเลขที่ ๓๖๒ ง ซอยกลป้อมค่าย จังหวัดชลบุรี — ไม่ใช่เพียงสิ่งก่อสร้างเก่าแก่ หากแต่เป็นพยานแห่งกาลเวลา บันทึกชีวิต และรากเหง้าของชุมชนมาตลอดกว่าร้อยปี คนรุ่นหลังเรียกว่า <strong style="color:var(--gold)">"บ้านหลวงอำนาจจีนนิกร"</strong> ส่วนคนเก่าก่อนที่มีอายุสามสิบขึ้นไปจะเรียกกันว่า "บ้านคุณยายหยี่"</p>
+        <p class="rv d1">ตัวเรือนประกอบด้วยเรือนแฝดหลังคาทรงไทย ฝาบ้านทำจากไม้เนื้อแข็งหลายชนิด — ไม้สัก ไม้ตะแบก ไม้เต็ง ฝาเรือนแบบ <em>"ฝาสายบัว"</em> หน้าจั่วแบบ <em>"จั่วใบเรือ"</em> มีพาไลกว้างขวางด้านหน้า สะท้อนภูมิปัญญาการก่อสร้างของช่างไทยโบราณ</p>
+        <p class="rv d2">บ้านหลังนี้ได้รับการดูแลรักษาและซ่อมแซมมาอย่างต่อเนื่องตลอดหลายชั่วอายุคน จนได้รับรางวัลอนุรักษ์ศิลปะสถาปัตยกรรมดีเด่น ประเภทชุมชนพื้นถิ่น ในปี พ.ศ. ๒๕๕๖</p>
+        <div style="padding-top:1.5rem;padding-bottom:.5rem">
+          <a href="house-story.html" class="read-more-btn rv">อ่านต่อ</a>
+        </div>
+        <div class="about-stats rv d3">
+          <div class="stat"><span class="stat-n">๑๔๐+</span><div class="stat-l">ปีแห่งประวัติศาสตร์</div></div>
+          <div class="stat"><span class="stat-n">๕</span><div class="stat-l">ชั่วอายุคน</div></div>
+          <div class="stat"><span class="stat-n">๒</span><div class="stat-l">เรือนแฝดทรงไทย</div></div>
+          <div class="stat"><span class="stat-n">๒๕๕๖</span><div class="stat-l">รางวัลอนุรกษ์ศิลปสถาปัตยกรรมดีเด่น</div></div>
+        </div>
+      </div>
+      <div class="about-imgs rv d2">
+        <img class="about-img1" src="บ้านหลวงอำนาจ/บ้านหลวงอำนาจีนิกร.jpg" alt="บ้านหลวงอำนาจจีนนิกร">
+        <img class="about-img2" src="บ้านหลวงอำนาจ/ห้องโถงกลางในเรือนหลังทานตะวัน.jpg" alt="ห้องโถงกลาง">
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div style="margin-top:5.5rem">
+      <div class="rv">
+        <span class="sec-num">— ลำดับเหตุการณ์ —</span>
+        <h3 style="font-family:var(--serif);font-size:1.75rem;font-weight:600;margin-bottom:2.5rem">ประวัติตามลำดับเวลา</h3>
+      </div>
+      <div class="tl">
+        <div class="tl-item rv"><span class="tl-yr">ก่อน พ.ศ. ๒๔๒๔</span><div class="tl-ev">หลวงอำนาจจีนนิกรปลูกสร้างบ้าน</div><p class="tl-desc">ปลูกสร้างบ้านที่ปลายสะพานหัวค่าย ริมทะเลชลบุรี เพื่ออยู่อาศัยกับอำแดงพริ้งภรรยา</p></div>
+        <div class="tl-item rv d1"><span class="tl-yr">พ.ศ. ๒๔๕๔</span><div class="tl-ev">หลวงอำนาจจีนนิกรถึงแก่กรรม</div><p class="tl-desc">บ้านตกทอดสู่นายชำนาญ (เม่งเชี้ยว) บุปผเวส บุตรชาย ผู้สืบสานกิจการประมง</p></div>
+        <div class="tl-item rv d2"><span class="tl-yr">พ.ศ. ๒๔๕๙</span><div class="tl-ev">การต่อเติมครั้งแรก</div><p class="tl-desc">ต่อพาไลให้กว้างออก กั้นฝาเติมหน้าต่าง รองรับครอบครัวที่ขยายใหญ่ขึ้น</p></div>
+        <div class="tl-item rv d3"><span class="tl-yr">พ.ศ. ๒๔๖๖–๒๔๗๒</span><div class="tl-ev">เปลี่ยนหลังคาสังกะสี สร้างบ่อน้ำ</div><p class="tl-desc">นายชำนาญเป็นบุคคลที่สองในเมืองชลบุรีที่สร้างบ่อน้ำคอนกรีตในทะเลเพื่อกักเก็บน้ำฝน</p></div>
+        <div class="tl-item rv"><span class="tl-yr">พ.ศ. ๒๔๗๓–๒๔๗๔</span><div class="tl-ev">สมเด็จเจ้าฟ้ากรมพระยานริศรานุวัติวงศ์เสด็จเยี่ยม</div><p class="tl-desc">"สมเด็จครูช่าง" เสด็จมาพร้อมหม่อมและเจ้านายเล็กๆ และนั่งเรือไปดูการจับปลาในโป๊ะกลางทะเล</p></div>
+        <div class="tl-item rv d1"><span class="tl-yr">พ.ศ. ๒๕๐๘</span><div class="tl-ev">ซ่อมแซมและเปลี่ยนซุ้มประตูแบบจีน</div><p class="tl-desc">ทำห้องน้ำสมัยใหม่ เปลี่ยนหลังคา ซุ้มประตูแบบจีนที่เห็นอยู่ทุกวันนี้ถูกสร้างในยุคนี้</p></div>
+        <div class="tl-item rv d2"><span class="tl-yr">พ.ศ. ๒๕๔๙</span><div class="tl-ev">รางวัลอนุรักษ์ศิลปะสถาปัตยกรรมดีเด่น</div><p class="tl-desc">ได้รับรางวัลจากสมาคมสถาปนิกสยามในพระบรมราชูปถัมภ์ รับพระราชทานจากสมเด็จพระเทพรัตนราชสุดา</p></div>
+        <div class="tl-item rv d3"><span class="tl-yr">พ.ศ. ๒๕๕๔</span><div class="tl-ev">บูรณะฟื้นฟูครั้งใหญ่</div><p class="tl-desc">เริ่มงานซ่อมแซมในเดือนเมษายน แล้วเสร็จเดือนกุมภาพันธ์ปีถัดมา โดยช่างไม้พื้นบ้าน</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DIVIDER ── -->
+<div class="divider"><div class="divider-line"></div><div class="divider-gem">✦&nbsp;✦&nbsp;✦</div><div class="divider-line"></div></div>
+
+<!-- ── FOUNDER ── -->
+<div class="band" id="founder">
+<div class="wrap">
+  <div class="rv">
+    <span class="sec-num">— ๐๒ —</span>
+    <h2 class="sec-h">หลวงอำนาจจีนนิกร</h2>
+  </div>
+
+  <div class="f2" style="margin-top:2.5rem">
+    <div class="fi rv">
+      <img src="บ้านหลวงอำนาจ/หลวงอำนาจจีนนิกร.jpg" alt="หลวงอำนาจจีนนิกร">
+    </div>
+    <div class="ft rv d2">
+      <p><strong>หลวงอำนาจจีนนิกร</strong> มีนามเดิมว่า "ฮั้ว" เป็นบุตรของจีนปังแซ่ตั๊ง ผู้อพยพมาจากมณฑลกวางตุ้ง ประเทศจีน มารดาชื่ออำแดงก่า เป็นหญิงไทยผู้มีฐานะมั่งคั่ง สายเลือดสองแผ่นดินที่หล่อหลอมชุมชนประมงแห่งชลบุรี</p>
+      <p>ท่านสืบทอดกิจการประมงจนรุ่งเรืองเป็นปึกแผ่น ได้ตำแหน่งนายอากรรับเหมาประเมินภาษี และเข้าสู่ระบบราชการจนได้รับบรรดาศักดิ์ โฉนดที่ดินมีวงเล็บระบุว่าเป็น <strong>"ผู้ใหญ่บ้าน"</strong></p>
+      <p>คุณยายของผู้เขียนเล่าว่า ท่านสูงสง่า จมูกโด่ง ผิวขาวแบบคนจีน — โดยเฉพาะในยุคหลัง ๆ ที่ท่านไม่ได้ออกไปกรำงานประมงด้วยตัวเองแล้ว</p>
+      <div class="pq">
+        <p>"กระดูกของท่านยังอยู่ในเรือน กระดูกคุณทวดพริ้งด้วย ทั้งสองท่านไม่ชอบเสียงเอะอะ"</p>
+        <cite>— คำบอกเล่าสืบต่อกันในครอบครัว</cite>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:5rem">
+    <h3 class="rv" style="font-family:var(--serif);font-size:1.5rem;font-weight:600;margin-bottom:2.5rem;color:var(--ivory-dim)">นายชำนาญ บุปผเวส — บุตรชายผู้สืบทอด</h3>
+    <div class="f2 rev">
+      <div class="fi rv d1">
+        <img src="บ้านหลวงอำนาจ/ยายหยี่บุบผเวสเจ้าของบ้านหลวงอำนาจ.jpg" alt="คุณยายหยี่ บุปผเวส" style="object-position:right">
+      </div>
+      <div class="ft rv d2">
+        <span class="ft-label">คุณยายหยี่ บุปผเวส — เจ้าของบ้านรุ่นที่ ๒</span>
+        <p>นายชำนาญ (เม่งเชี้ยว) บุปผเวส บุตรชายของหลวงอำนาจจีนนิกรกับอำแดงพริ้ง สืบทอดบ้านและกิจการหลังจากคุณก๋งถึงแก่กรรม แต่งงานกับนางหยี่ ซึ่งต่อมาเป็นที่รู้จักในชื่อ "คุณยายหยี่" ผู้ดูแลบ้านตลอดชีวิต</p>
+        <p>นายชำนาญเป็นบุคคลที่สองในเมืองชลบุรีที่สร้างบ่อน้ำคอนกรีตในทะเล — นวัตกรรมที่แสดงถึงสายตาอันยาวไกล บ่อน้ำสองบ่อจุน้ำได้กว่าหนึ่งแสนลิตร</p>
+        <p>น้องชายของท่าน คือรองอำมาตย์เอกพระทิพยปัญญา (เอื้อ บุปผเวส) ผู้ขอพระราชทานนามสกุล <strong>"บุปผเวส"</strong> จากพระบาทสมเด็จพระมงกุฎเกล้าเจ้าอยู่หัว</p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── DIVIDER ── -->
+<div class="divider"><div class="divider-line"></div><div class="divider-gem">✦&nbsp;✦&nbsp;✦</div><div class="divider-line"></div></div>
+
+<!-- ── ARCHITECTURE ── -->
+<section id="architecture">
+<div class="wrap">
+  <div class="rv">
+    <span class="sec-num">— ๐๓ —</span>
+    <h2 class="sec-h">สถาปัตยกรรม</h2>
+  </div>
+
+  <h3 class="sub-h rv">แบบร่างสถาปัตยกรรม</h3>
+  <div class="arch-grid">
+    <div class="arch-item rv"><img src="Drawing_Render/drawing-01.jpg" alt="แบบร่าง ๑"><div class="arch-label">แบบร่าง — ๐๑</div></div>
+    <div class="arch-item rv d1"><img src="Drawing_Render/drawing-02.jpg" alt="แบบร่าง ๒"><div class="arch-label">แบบร่าง — ๐๒</div></div>
+    <div class="arch-item rv d2"><img src="Drawing_Render/drawing-03.jpg" alt="แบบร่าง ๓"><div class="arch-label">แบบร่าง — ๐๓</div></div>
+    <div class="arch-item rv d1"><img src="Drawing_Render/drawing-04.jpg" alt="แบบร่าง ๔"><div class="arch-label">แบบร่าง — ๐๔</div></div>
+    <div class="arch-item rv d2"><img src="Drawing_Render/drawing-05.jpg" alt="แบบร่าง ๕"><div class="arch-label">แบบร่าง — ๐๕</div></div>
+    <div class="arch-item rv d3"><img src="Drawing_Render/drawing-06.jpg" alt="แบบร่าง ๖"><div class="arch-label">แบบร่าง — ๐๖</div></div>
+  </div>
+
+</div>
+</section>
+
+<!-- ── DIVIDER ── -->
+<div class="divider"><div class="divider-line"></div><div class="divider-gem">✦&nbsp;✦&nbsp;✦</div><div class="divider-line"></div></div>
+
+<!-- ── HOUSE TODAY ── -->
+<div class="band2">
+<div class="wrap">
+  <div class="rv">
+    <span class="sec-num">— ๐๔ —</span>
+    <h2 class="sec-h">บ้านในวันนี้</h2>
+  </div>
+  <div class="int-grid">
+    <div class="int-item rv"><img src="บ้านหลวงอำนาจ/เรือนหลังทานตะวัน.jpg" alt="เรือนหลังทานตะวัน"><div class="int-cap">เรือนหลังทานตะวัน</div></div>
+    <div class="int-item rv d1"><img src="บ้านหลวงอำนาจ/ห้องโถงกลางในเรือนหลังทานตะวัน.jpg" alt="ห้องโถงกลาง"><div class="int-cap">ห้องโถงกลางในเรือนหลังทานตะวัน</div></div>
+    <div class="int-item rv d2"><img src="บ้านหลวงอำนาจ/ห้องนอนภายในเรือนหลังทานตะวัน.jpg" alt="ห้องนอน"><div class="int-cap">ห้องนอนภายในเรือนหลังทานตะวัน</div></div>
+    <div class="int-item rv d3"><img src="บ้านหลวงอำนาจ/ศาลพระภูมิแบบดั้งเดิม.jpg" alt="ศาลพระภูมิ"><div class="int-cap">ศาลพระภูมิแบบดั้งเดิม</div></div>
+    <div class="int-item rv"><img src="บ้านหลวงอำนาจ/เครื่องใช้ในบ้านที่คุณยายหยี่.jpg" alt="เครื่องใช้"><div class="int-cap">เครื่องใช้ในบ้านของคุณยายหยี่</div></div>
+  </div>
+</div>
+</div>
+
+<!-- ── DIVIDER ── -->
+<div class="divider"><div class="divider-line"></div><div class="divider-gem">✦&nbsp;✦&nbsp;✦</div><div class="divider-line"></div></div>
+
+<!-- ── OLD PHOTOS ── -->
+<section id="gallery">
+<div class="wrap">
+  <div class="rv">
+    <span class="sec-num">— ๐๕ —</span>
+    <h2 class="sec-h">มองภาพเก่า เล่าเรื่องคุณก๋ง</h2>
+  </div>
+  <p class="rv" style="color:var(--ivory-dim);max-width:640px;margin-bottom:3rem;line-height:1.85">คอลเลคชันภาพถ่ายเก่าและเอกสารทางประวัติศาสตร์ที่เล่าเรื่องราวของหลวงอำนาจจีนนิกรและลูกหลาน เขียนโดย <strong style="color:var(--gold)">ปิยะพร ศักดิ์เกษม</strong> ลงพิมพ์ในนิตยสารสกุลไทย</p>
+</div>
+<div class="gal-grid">
+  <div class="gal-item rv"><img src="มองภาพเก่า เล่าเรื่องคุณก๋ง/505387834_23993615513591911_6970270245890048756_n.jpg" alt=""><div class="gal-ov"></div><div class="gal-cap">ภาพประวัติศาสตร์</div></div>
+  <div class="gal-item rv d1"><img src="มองภาพเก่า เล่าเรื่องคุณก๋ง/506902021_23997398876546908_8699821887108109871_n.jpg" alt=""><div class="gal-ov"></div><div class="gal-cap">ภาพประวัติศาสตร์</div></div>
+  <div class="gal-item rv d2"><img src="มองภาพเก่า เล่าเรื่องคุณก๋ง/507180972_23997398823213580_5554083644999632245_n.jpg" alt=""><div class="gal-ov"></div><div class="gal-cap">ภาพประวัติศาสตร์</div></div>
+  <div class="gal-item rv d3"><img src="มองภาพเก่า เล่าเรื่องคุณก๋ง/506595453_23997398786546917_2550945555749256106_n.jpg" alt=""><div class="gal-ov"></div><div class="gal-cap">ภาพประวัติศาสตร์</div></div>
+  <div class="gal-item rv"><img src="มองภาพเก่า เล่าเรื่องคุณก๋ง/506539025_23997398896546906_1159365620272975945_n.jpg" alt=""><div class="gal-ov"></div><div class="gal-cap">ภาพประวัติศาสตร์</div></div>
+  <div class="gal-item rv d1"><img src="มองภาพเก่า เล่าเรื่องคุณก๋ง/506593416_23997396489880480_8515973189537227762_n.jpg" alt=""><div class="gal-ov"></div><div class="gal-cap">ภาพประวัติศาสตร์</div></div>
+  <div class="gal-item rv d2"><img src="มองภาพเก่า เล่าเรื่องคุณก๋ง/505401766_23993615793591883_6468992439350566474_n.jpg" alt=""><div class="gal-ov"></div><div class="gal-cap">ภาพประวัติศาสตร์</div></div>
+  <div class="gal-item rv d3"><img src="มองภาพเก่า เล่าเรื่องคุณก๋ง/506459740_23997398769880252_7188638259375162693_n.jpg" alt=""><div class="gal-ov"></div><div class="gal-cap">ภาพประวัติศาสตร์</div></div>
+  <div class="gal-item rv"><img src="มองภาพเก่า เล่าเรื่องคุณก๋ง/ภาพถ่ายอีกภาพหนึ่งที่ติดอยู่ที่เรือนหลังทิศตะวันออกคือภาพที่มีหลวงอำนาจจีนนิกรยืนอยู่ด้านซ้ายมือสุด.jpg" alt="หลวงอำนาจจีนนิกรยืนอยู่ด้านซ้ายมือสุด"><div class="gal-ov"></div><div class="gal-cap">หลวงอำนาจจีนนิกรยืนอยู่ด้านซ้ายมือสุด</div></div>
+  <div class="gal-item rv d1"><img src="มองภาพเก่า เล่าเรื่องคุณก๋ง/พระราชนิพนธ์จดหมายเหตุบันทึก.jpg" alt="พระราชนิพนธ์"><div class="gal-ov"></div><div class="gal-cap">พระราชนิพนธ์จดหมายเหตุบันทึก</div></div>
+  <div class="gal-item rv d2"><img src="มองภาพเก่า เล่าเรื่องคุณก๋ง/เป็นที่ระลึกถึงหญิงปลื้มจิต.jpg" alt=""><div class="gal-ov"></div><div class="gal-cap">เป็นที่ระลึกถึงหญิงปลื้มจิต</div></div>
+  <div class="gal-item rv d3"><img src="มองภาพเก่า เล่าเรื่องคุณก๋ง/ส่งหีบเพลิงไปพระราชทาน.jpeg" alt="ส่งหีบเพลิง"><div class="gal-ov"></div><div class="gal-cap">ส่งหีบเพลิงไปพระราชทาน</div></div>
+</div>
+<div class="wrap" style="padding-top:3rem;padding-bottom:1rem;text-align:center">
+  <a href="gallery-story.html" class="read-more-btn rv">อ่านต่อ</a>
+</div>
+</section>
+
+<!-- ── DIVIDER ── -->
+<div class="divider"><div class="divider-line"></div><div class="divider-gem">✦&nbsp;✦&nbsp;✦</div><div class="divider-line"></div></div>
+
+<!-- ── NOVELS ── -->
+<div class="band" id="novels">
+<div class="wrap">
+  <div class="rv">
+    <span class="sec-num">— ๐๖ —</span>
+    <h2 class="sec-h">นวนิยายที่มีจุดกำเนิดมาจากบ้านหลังนี้</h2>
+  </div>
+  <p class="rv" style="color:var(--ivory-dim);max-width:700px;line-height:1.85">ปิยะพร ศักดิ์เกษม เหลนสาวของหลวงอำนาจจีนนิกร ได้นำเรื่องราวของบ้านและครอบครัวมาถ่ายทอดเป็นนวนิยาย สะท้อนวิถีชีวิต ประเพณี และประวัติศาสตร์ชุมชนประมงชลบุรี</p>
+  <p class="rv" style="color:var(--ivory);font-size:1.5rem;font-family:var(--serif);letter-spacing:.04em;margin-top:.8rem;margin-bottom:3rem;text-align:center">คลิกที่รูปเพื่อสั่งซื้อนิยายออนไลน์</p>
+  <div class="books">
+    <div class="book rv">
+      <div class="book-wrap">
+        <a href="https://s.shopee.co.th/8V48qWf0mo" target="_blank" rel="noopener">
+          <img src="นิยายที่มีจุดกำเนิดมาจากบ้านหลังนี้/ในวารวัน.jpg" alt="ในวารวัน" class="no-lb">
+        </a>
+      </div>
+      <div class="book-title">ในวารวัน</div>
+      <div class="book-author">ปิยะพร ศักดิ์เกษม</div>
+    </div>
+    <div class="book rv d1">
+      <div class="book-wrap">
+        <a href="https://s.shopee.co.th/6fcUfEmJCJ" target="_blank" rel="noopener">
+          <img src="นิยายที่มีจุดกำเนิดมาจากบ้านหลังนี้/ตะวันเบิกฟ้า.jpg" alt="ตะวันเบิกฟ้า" class="no-lb">
+        </a>
+      </div>
+      <div class="book-title">ตะวันเบิกฟ้า</div>
+      <div class="book-author">ปิยะพร ศักดิ์เกษม</div>
+    </div>
+    <div class="book rv d2">
+      <div class="book-wrap">
+        <a href="https://s.shopee.co.th/4frQHbpkqO" target="_blank" rel="noopener">
+          <img src="นิยายที่มีจุดกำเนิดมาจากบ้านหลังนี้/ขอบฟ้าราตรี.jpg" alt="ขอบฟ้าราตรี" class="no-lb">
+        </a>
+      </div>
+      <div class="book-title">ขอบฟ้าราตรี</div>
+      <div class="book-author">ปิยะพร ศักดิ์เกษม</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── DIVIDER ── -->
+<div class="divider"><div class="divider-line"></div><div class="divider-gem">✦&nbsp;✦&nbsp;✦</div><div class="divider-line"></div></div>
+
+<!-- ── PLAQUES ── -->
+<section>
+<div class="wrap">
+  <div class="rv">
+    <span class="sec-num">— ๐๗ —</span>
+    <h2 class="sec-h">ความหมายของป้าย</h2>
+  </div>
+  <p class="rv" style="color:var(--ivory-dim);max-width:600px;margin-bottom:3rem;line-height:1.85">ป้ายและจารึกภายในบ้าน โดยเฉพาะในห้องเก็บอัฐิบรรพบุรุษ มีความหมายเชิงประวัติศาสตร์และวัฒนธรรมลึกซึ้ง</p>
+  <div class="plq-grid">
+    <div class="plq-item rv"><img src="ความหมายของป้าย/ป้ายในห้องเก็บอัฐิของบรรพบุรษ.jpg" alt="ป้าย"><div class="plq-cap">ป้ายในห้องเก็บอัฐิบรรพบุรุษ</div></div>
+    <div class="plq-item rv d1"><img src="ความหมายของป้าย/ป้ายในห้องเก็บอัฐิของบรรพบุรษ2.jpg" alt="ป้าย ๒"><div class="plq-cap">ป้ายในห้องเก็บอัฐิบรรพบุรุษ (๒)</div></div>
+    <div class="plq-item rv d2"><img src="ความหมายของป้าย/คำแปลควาหมายป้าย.jpg" alt="คำแปล"><div class="plq-cap">คำแปลความหมายป้าย</div></div>
+    <div class="plq-item rv d3"><img src="ความหมายของป้าย/481296313_1133183325272876_6903881443803363737_n.jpg" alt="ป้าย"><div class="plq-cap">ป้ายประวัติศาสตร์</div></div>
+  </div>
+</div>
+</section>
+
+<!-- ── DIVIDER ── -->
+<div class="divider"><div class="divider-line"></div><div class="divider-gem">✦&nbsp;✦&nbsp;✦</div><div class="divider-line"></div></div>
+
+<!-- ── AWARD ── -->
+<div class="band" id="award">
+<div class="wrap">
+  <div class="rv">
+    <span class="sec-num">— ๐๘ —</span>
+    <h2 class="sec-h">รางวัลอนุรักษ์</h2>
+  </div>
+
+  <div class="award-wrap">
+    <div class="award-img-wrap rv">
+      <img src="รางวัลอนุรักษ์จากสมาคม/รางวัลอนุรักษ์สถาปัตยกรรม.jpg" alt="รางวัล">
+    </div>
+    <div class="rv d2">
+      <div class="award-badge">
+        <span style="font-size:1.5rem">🏛</span>
+        <span class="award-badge-text">สมาคมสถาปนิกสยาม<br>ในพระบรมราชูปถัมภ์</span>
+      </div>
+      <span class="award-yr">พ.ศ. ๒๕๔๙ &nbsp;—&nbsp; รับพระราชทาน ๒๒ มกราคม พ.ศ. ๒๕๕๐</span>
+      <h3 class="award-h">รางวัลอนุรักษ์ศิลปะสถาปัตยกรรมดีเด่น<br>ประเภทชุมชนพื้นถิ่น</h3>
+      <p class="award-p">รางวัลเดียวกับที่ตลาดสามชุกได้รับในปี พ.ศ. ๒๕๔๘ มอบโดยสมาคมสถาปนิกสยามในพระบรมราชูปถัมภ์ เพื่อเชิดชูเกียรติสถาปัตยกรรมพื้นถิ่นที่ได้รับการอนุรักษ์ไว้อย่างดีเยี่ยม</p>
+      <p class="award-p" style="margin-top:1rem">ผู้แทนครอบครัวเข้ารับพระราชทานรางวัลจาก <strong style="color:var(--gold)">สมเด็จพระเทพรัตนราชสุดาสยามบรมราชกุมารี</strong> ณ ศาลาดุสิดาลัย สวนจิตรลดา</p>
+    </div>
+  </div>
+
+  <div class="award-sub-grid">
+    <div class="rv">
+      <img class="award-sub-item" src="รางวัลอนุรักษ์จากสมาคม/จดกมายมอบรางวัลของสมาคมสถาปนิกสยาม.jpg" alt="จดหมายมอบรางวัล" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:brightness(.8) sepia(14%)">
+      <div class="award-sub-cap">จดหมายมอบรางวัลของสมาคมสถาปนิกสยาม</div>
+    </div>
+    <div class="rv d1">
+      <img src="รางวัลอนุรักษ์จากสมาคม/ลายพระหัตถ์พระเทพ.jpg" alt="ลายพระหัตถ์" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:brightness(.8) sepia(14%)">
+      <div class="award-sub-cap">ลายพระหัตถ์สมเด็จพระเทพรัตนราชสุดา</div>
+    </div>
+    <div class="rv d2">
+      <img src="รางวัลอนุรักษ์จากสมาคม/สมาคมสถาปิกมาสัมภาษณ์ก่อนมอบรางวัล.jpg" alt="สัมภาษณ์" style="width:100%;aspect-ratio:4/3;object-fit:cover;filter:brightness(.8) sepia(14%)">
+      <div class="award-sub-cap">สมาคมสถาปนิกมาสัมภาษณ์ก่อนมอบรางวัล</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── DIVIDER ── -->
+<div class="divider"><div class="divider-line"></div><div class="divider-gem">✦&nbsp;✦&nbsp;✦</div><div class="divider-line"></div></div>
+
+<!-- ── CHINESE COMMUNITY ── -->
+<section class="band2" id="chinese-community">
+<div class="wrap">
+  <div class="rv">
+    <span class="sec-num">— ๐๙ —</span>
+    <h2 class="sec-h">ชุมชนชาวจีนในบางปลาสร้อย</h2>
+  </div>
+
+  <div class="f2" style="margin-top:2.5rem">
+    <div class="ft rv d1">
+      <p style="color:var(--ivory-dim);line-height:1.9;margin-bottom:1.6rem">รากเหง้าของชาวจีนในชลบุรีหยั่งลึกกว่าที่หลายคนคาด — ย้อนไปถึง<strong style="color:var(--ivory)">ปลายสมัยกรุงศรีอยุธยา</strong> เมื่อชาวจีนตอนใต้อพยพหนีภัยสงครามเปลี่ยนราชวงศ์ลงมาตั้งถิ่นฐานตามชายฝั่งตะวันออก รวมถึงย่าน "บางปลาสร้อย" ซึ่งเป็นตัวเมืองชลบุรีโบราณ</p>
+      <ul class="chin-list">
+        <li><strong>หลักฐานสมัยอยุธยา</strong> — ภาพจิตรกรรมฝาผนังในพระอุโบสถ<strong>วัดใหญ่อินทาราม</strong> ปรากฏภาพชาวจีนโบราณไว้ผมหางเปียนั่งอยู่ในเรือ สะท้อนวิถีค้าขายทางน้ำในพื้นที่อย่างชัดเจน</li>
+        <li><strong>ร่องรอยแห่งศรัทธา</strong> — ศาลเจ้า โรงเจ และโรงเรียนจีนกระจายทั่วย่านบางปลาสร้อย คือเครื่องยืนยันการรวมกลุ่มชุมชนที่เข้มแข็งเพื่อสืบทอดวัฒนธรรม</li>
+        <li><strong>บทบาทในประวัติศาสตร์</strong> — "จีนเรือง" คหบดีฮกเกี้ยนที่ช่วยรบกับพระเจ้าตากสิน จนได้รับการสถาปนาเป็นขุนนาง ต้นราชสกุลสุนทรกุล ณ ชลบุรี</li>
+      </ul>
+      <div style="margin-top:2rem">
+        <a href="chinese-community.html" class="read-more-btn rv">อ่านต่อ</a>
+      </div>
+    </div>
+    <div class="fi rv d2">
+      <div class="chin-img-grid">
+        <img src="ชุมชนชาวจีนในบางปลาสร้อย/ภาพวาดในวัดใหญ่อินทราราม.jpg" alt="ภาพวาดในวัดใหญ่อินทราราม">
+        <img src="ชุมชนชาวจีนในบางปลาสร้อย/ภาพคนจีนหางเปีย.jpg" alt="คนจีนหางเปีย">
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ── DIVIDER ── -->
+<div class="divider"><div class="divider-line"></div><div class="divider-gem">✦&nbsp;✦&nbsp;✦</div><div class="divider-line"></div></div>
+
+<!-- ── ROOTS & FAITH VIDEO ── -->
+<div class="band2" id="roots">
+<div class="wrap">
+  <div class="rv">
+    <span class="sec-num">— ๑๐ —</span>
+    <h2 class="sec-h">ร่องรอยแห่งรากเหง้าและศรัทธา</h2>
+  </div>
+  <p class="rv" style="color:var(--ivory-dim);max-width:680px;margin-bottom:3rem;line-height:1.85">
+    บันทึกภาพเคลื่อนไหวที่ถ่ายทอดเรื่องราวของบ้านหลวงอำนาจจีนนิกร รากเหง้าของครอบครัว และศรัทธาที่สืบทอดมาจากรุ่นสู่รุ่น
+  </p>
+  <div class="rv">
+    <div class="video-frame">
+      <div class="video-wrap">
+        <iframe
+          src="https://www.youtube.com/embed/wXnKuQsAvC0"
+          title="ร่องรอยแห่งรากเหง้าและศรัทธา — บ้านหลวงอำนาจจีนนิกร"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+    <div class="video-meta">
+      <div class="video-meta-bar"></div>
+      <p class="video-desc">สารคดีสั้นที่บันทึกเรื่องราวของบ้านเลขที่ ๓๖๒ ง ซอยกลป้อมค่าย จังหวัดชลบุรี — บ้านที่มีอายุกว่าร้อยสี่สิบปี ผ่านสายตาของลูกหลานผู้สืบทอดความทรงจำและความศรัทธาอันลึกซึ้งของบรรพบุรุษไว้</p>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ── DIVIDER ── -->
+<div class="divider"><div class="divider-line"></div><div class="divider-gem">✦&nbsp;✦&nbsp;✦</div><div class="divider-line"></div></div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer">
+    <div>
+      <div class="foot-brand">บ้านหลวงอำนาจจีนนิกร</div>
+      <p class="foot-desc">พิพิธภัณฑ์มรดกชลบุรี<br>รักษาไว้ซึ่งประวัติศาสตร์ของชุมชนสะพานบางปลาสร้อย</p>
+    </div>
+    <div>
+      <p class="foot-addr">บ้านเลขที่ ๓๖๒ ง<br>ซอยกลป้อมค่าย ถนนวชิรปราการ<br>อำเภอเมือง จังหวัดชลบุรี<br><br>เนื้อหาโดย ปิยะพร ศักดิ์เกษม</p>
+    </div>
+  </div>
+  <div class="foot-copy">
+    <span>© บ้านหลวงอำนาจจีนนิกร — มรดกสถาปัตยกรรมชลบุรี</span>
+    <span>ก่อตั้งก่อน พ.ศ. ๒๔๒๔</span>
+  </div>
+</footer>
+
+<!-- ── LIGHTBOX ── -->
+<div class="lb" id="lb" role="dialog" aria-modal="true">
+  <div class="lb-close" id="lbClose" title="ปิด">&#x2715;</div>
+  <button class="lb-prev" id="lbPrev" title="ก่อนหน้า">&#8592;</button>
+  <div class="lb-inner">
+    <div class="lb-img-wrap">
+      <img class="lb-img" id="lbImg" src="" alt="">
+    </div>
+    <div class="lb-caption" id="lbCaption"></div>
+    <div class="lb-count" id="lbCount"></div>
+  </div>
+  <button class="lb-next" id="lbNext" title="ถัดไป">&#8594;</button>
+</div>
+
+<script>
+  // Navbar scroll
+  const nav = document.getElementById('nav');
+  addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 80), { passive: true });
+
+  // Hamburger
+  const burger = document.getElementById('navBurger');
+  const drawer = document.getElementById('navDrawer');
+  burger.addEventListener('click', () => {
+    const open = drawer.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    drawer.classList.remove('open');
+    burger.classList.remove('open');
+    document.body.style.overflow = '';
+  }));
+
+  // Hero parallax
+  const heroBg = document.getElementById('heroBg');
+  addEventListener('scroll', () => {
+    if (scrollY < innerHeight) heroBg.style.transform = `scale(1.06) translateY(${scrollY * 0.28}px)`;
+  }, { passive: true });
+
+  // Reveal on scroll
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('on'); obs.unobserve(e.target); } });
+  }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+  document.querySelectorAll('.rv').forEach(el => obs.observe(el));
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+
+  // ── LIGHTBOX ──
+  const lb     = document.getElementById('lb');
+  const lbImg  = document.getElementById('lbImg');
+  const lbCap  = document.getElementById('lbCaption');
+  const lbCnt  = document.getElementById('lbCount');
+  const lbClose= document.getElementById('lbClose');
+  const lbPrev = document.getElementById('lbPrev');
+  const lbNext = document.getElementById('lbNext');
+
+  // Collect all content images (exclude hero background — it's a div, not img)
+  // Exclude the hero-bg entirely; target all real <img> elements
+  const SKIP = ['lb-img', 'no-lb'];
+  let items = [];
+  let current = 0;
+
+  function buildItems() {
+    items = [];
+    document.querySelectorAll('img').forEach(img => {
+      if (SKIP.some(c => img.classList.contains(c))) return;
+      if (!img.src || img.src.endsWith('#')) return;
+      // Caption: alt text, or nearest .int-cap / .arch-label / .gal-cap / .plq-cap / .award-sub-cap / .book-title
+      let cap = img.alt || '';
+      const parent = img.closest('.int-item,.arch-item,.gal-item,.plq-item,.book,.about-imgs,.fi,.award-img-wrap,[style]');
+      if (parent) {
+        const capEl = parent.querySelector('.int-cap,.arch-label,.gal-cap,.plq-cap,.award-sub-cap,.book-title');
+        if (capEl) cap = capEl.textContent.trim();
+      }
+      img.classList.add('lb-trigger');
+      img.dataset.lbIdx = items.length;
+      items.push({ src: img.src, cap });
+    });
+  }
+
+  function openLb(idx) {
+    current = idx;
+    const item = items[current];
+    lbImg.src = item.src;
+    lbImg.alt = item.cap;
+    lbCap.textContent = item.cap;
+    lbCnt.textContent = `${current + 1} / ${items.length}`;
+    lbPrev.classList.toggle('hidden', current === 0);
+    lbNext.classList.toggle('hidden', current === items.length - 1);
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLb() {
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+    setTimeout(() => { lbImg.src = ''; }, 350);
+  }
+
+  function goTo(idx) {
+    if (idx < 0 || idx >= items.length) return;
+    current = idx;
+    const item = items[current];
+    lbImg.style.opacity = '0';
+    setTimeout(() => {
+      lbImg.src = item.src;
+      lbImg.alt = item.cap;
+      lbCap.textContent = item.cap;
+      lbCnt.textContent = `${current + 1} / ${items.length}`;
+      lbPrev.classList.toggle('hidden', current === 0);
+      lbNext.classList.toggle('hidden', current === items.length - 1);
+      lbImg.style.opacity = '1';
+    }, 120);
+  }
+
+  lbImg.style.transition = 'opacity .15s ease, transform .4s cubic-bezier(.16,1,.3,1)';
+
+  // Build after page load
+  buildItems();
+
+  // Delegate click on all lb-trigger images
+  document.addEventListener('click', e => {
+    const img = e.target.closest('img.lb-trigger');
+    if (img && img.dataset.lbIdx !== undefined) {
+      openLb(parseInt(img.dataset.lbIdx));
+    }
+  });
+
+  lbClose.addEventListener('click', closeLb);
+  lbPrev.addEventListener('click', () => goTo(current - 1));
+  lbNext.addEventListener('click', () => goTo(current + 1));
+
+  // Close on backdrop click (not on image)
+  lb.addEventListener('click', e => {
+    if (e.target === lb) closeLb();
+  });
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLb();
+    if (e.key === 'ArrowLeft')  goTo(current - 1);
+    if (e.key === 'ArrowRight') goTo(current + 1);
+  });
+
+  // Touch swipe
+  let touchX = null;
+  lb.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener('touchend', e => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 50) goTo(dx < 0 ? current + 1 : current - 1);
+    touchX = null;
+  });
+</script>
+</body>
+</html>
